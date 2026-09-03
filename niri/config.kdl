@@ -5,11 +5,11 @@ include "dms/cursor.kdl"
 // include "dms/layout.kdl"     // user/theme.kdl
 include "dms/outputs.kdl"
 include "dms/windowrules.kdl"
-include "dms/wpblur.kdl"
 
 include "user/autostart.kdl"
 include "user/binds.kdl"
 include "user/inputs.kdl"
 include "user/hardware.kdl"
 include "user/misc.kdl"
+include "user/dms-integration.kdl"
 include "user/theme.kdl"

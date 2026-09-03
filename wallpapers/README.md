@@ -1,13 +1,13 @@
 # Just some cool wallpapers
 
-Feel free to:
+To have this folder as easy access in `~/Pictures`:
 
 ```bash
 cp -rn ~/.dotfiles/niri-dms/wallpapers ~/Pictures/Wallpapers # copies folder, no override
 ```
 
-or
+... or
 
 ```bash
-ln -sin ~/.dotfiles/niri-dms/wallpapers ~/Pictures/Wallpapers # link folder
+ln -si ~/.dotfiles/niri-dms/wallpapers ~/Pictures/Wallpapers # link folder
 ```

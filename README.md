@@ -1,9 +1,5 @@
-> [!WARNING]
-> **2026-08-20** — ARCHIVED
->
-> This repo has been superceded by [niri-noctalia](https://github.com/aier9500/niri-noctalia).
->
-> This repo may still work for a while, but I cannot guarantee it not breaking as new updates roll out. 
+> [!NOTE]
+> **2026-09-03** — back in service. Archived 2026-08-20 in favour of [niri-noctalia](https://github.com/aier9500/niri-noctalia); the Niri-side improvements from that repo have been mirrored here.
 
 > [!CAUTION]
 > The commands in this README assume the repo lives at `~/.dotfiles/niri-dms`.
@@ -36,13 +32,13 @@ git clone https://github.com/aier9500/niri-dms ~/.dotfiles/niri-dms
 ### Installing packages on Fedora
 
 ```bash
-# Needs the Terra or Copr repo for DMS
-sudo dnf install niri dms
-systemctl --user add-wants niri.service dms
-dms setup
+# Terra repo (terra-extras) has newer versions
+sudo dnf install niri DankMaterialShell
+dms setup                                        # writes ~/.config/niri/dms/*.kdl
+systemctl --user add-wants niri.service dms      # DMS starts and stops with niri
 ```
 
-Relogin. (`Mod+Shift+E` to log out; Niri default)
+Relogin. (`Mod+F4` quits niri.)
 
 ### Backs up your current `~/.config/niri` to `~/.config/niri.bak`
 
@@ -57,9 +53,9 @@ mv ~/.config/niri ~/.config/niri.bak
 > [!NOTE]
 > The repo supplies you with config templates in `niri/template`. Use the code block below to create your editable copies at `niri/user` (gitignored).
 >
-> The `dms/*.kdl` files are also gitignored as DMS rewrites them (colours, outputs, blur, etc) as you use its GUI. The stub loop below creates empty placeholders so Niri won't error on a missing include before DMS has written the real ones.
+> The `dms/*.kdl` files are also gitignored as DMS rewrites them (colours, cursor, outputs, GUI window rules) as you use its GUI. The stub loop below creates empty placeholders so Niri won't error on a missing include before DMS has written the real ones. `dms/binds.kdl` and `dms/layout.kdl` are deliberately not included: binds live in `user/binds.kdl`, geometry in `user/theme.kdl`.
 
-Symlinks repo Niri configs to `~/.config/niri`. Creates local version of `niri/user/hardware`.kdl and `niri/user/binds.kdl`.
+Symlinks repo Niri configs to `~/.config/niri`. Creates local copies of every `niri/template/*.kdl` in `niri/user/`.
 
 ```bash
 repo=~/.dotfiles/niri-dms/niri
@@ -69,19 +65,21 @@ cp -rn "$repo/template/." "$repo/user/"  # copy templates
 
 # Stub loop to create DMS config placeholders
 mkdir -p "$repo/dms"
-for file in alttab colors cursor outputs windowrules wpblur; do
+for file in alttab colors cursor outputs windowrules; do
   if [ ! -e "$repo/dms/$file.kdl" ]; then
     touch "$repo/dms/$file.kdl"
   fi
 done
 ```
 
-> [!NOTE]
-> `hardware.kdl` ships with `render-drm-device` commented out.
->
-> On single-GPU machines, no modifications needed.
->
-> On Multi-GPU (e.g. laptop with dGPU) you might want to check `hardware.kdl`.
+> [!IMPORTANT]
+> On Multi-GPU (e.g. laptop with dGPU) check `user/hardware.kdl` to render Niri on the iGPU and avoid dGPU wake-up lag. Single-GPU machines can leave it as is.
+
+> [!TIP]
+> Monitors (refresh rate, layout, scale) are set in DMS Settings → Displays, which writes `dms/outputs.kdl`.
+
+> [!TIP]
+> Per-app window rules: `Mod+Shift+W` opens the DMS editor, which writes `dms/windowrules.kdl`.
 
 ### Nvidia High VRAM Fix
 
@@ -137,49 +135,45 @@ Some settings worth changing in the DMS settings after fresh install. Sorted by 
 
 ### Personalization
 
-- Wallpaper -> Duplicate with Blur -> true (blurry overview)
 - Theme & Color
-  - Theme Color -> Auto
+  - Theme Color -> Auto (derived from wallpaper)
   - Automatic Color Mode
     - Automatic Control
     - Share Gamma Control Settings
+  - Font
+- App theming -> enable GTK, Qt (qt6ct), Ghostty, Kitty
 
 ### Dank Bar
 
-- Positions
-- Widgets; here are some suggestions:
+- Position -> bottom, floating with 8px margins, ~70% opacity
+- Widgets:
   - Left
-    - Workspace Switcher
-    - Running Apps
+    - Workspace Switcher (no labels)
+    - Running Apps (current workspace only)
   - Centre
-    - Media Controls
+    - Media Controls (hide when idle)
   - Right
     - System Tray
-    - dGPU Sleep Monitor _(plugin)_
-    - Dank ASUS Control Center _(plugin)_
+    - dGPU Sleep Monitor _plugin_
+    - Battery
     - Control Center
-    - Clock
+    - Clock (`%Y-%m-%d · %H:%M` aka ISO)
     - Notification Center
 
-### Plugins
-
-- Dank ASUS Control Center (ASUS laptops only; req `asusctl`)
-- Dank Battery Alerts
-- dGPU Sleep Monitor (change GPU modes; req: `cardwire`)
-- Clight (auto screen brightness; req: `clightd`)
-- Emoji & Unicode Launcher
+- `arqueon-dms-gaze-auth` (face unlock; alternative to the PAM edit below)
 
 ### Displays
 
 - Gamma Control
-  - Night 3000k-4000k (suggested ambient lighting 2700k-3000k)
+  - Night 3500k (suggested ambient lighting 2700k-3000k)
   - Day 6500k (suggested ambient lighting 4000k-5000k)
+  - Schedule 05:30 -> 18:00
+- Brightness -> enable ddcutil for external monitors
 
 ### Power & Security -> Power & Sleep -> Idle Settings
 
 - Lock before suspend -> true
-- Plugged in: lock 5m, screen off 30m, sleep 1hr
-- On battery: lock 5m, screen off 5m, sleep 15m
+- Lock 5m, screen off 10m, sleep 20m
 
 ## Voice Typing (`voxtype`)
 

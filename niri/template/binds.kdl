@@ -23,13 +23,15 @@ binds {
     Mod+B { spawn "flatpak" "run" "app.zen_browser.zen"; }
     Mod+V { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
     Mod+I { spawn "dms" "ipc" "call" "settings" "focusOrToggle"; }
+    Mod+Shift+R { spawn "flatpak" "run" "com.dec05eba.gpu_screen_recorder/x86_64/stable"; }
 
     // === Components ===
     Mod+Y { spawn "dms" "ipc" "call" "dankdash" "wallpaper"; }
     Mod+S { spawn "dms" "ipc" "call" "control-center" "toggle"; }
-    Mod+N { spawn "dms" "ipc" "call" "notepad" "toggle"; }
     Mod+M { spawn "dms" "ipc" "call" "notifications" "toggle"; }
     Mod+A { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    Mod+N { spawn "dms" "ipc" "call" "notepad" "toggle"; }
+    Mod+Shift+W { spawn "dms" "ipc" "call" "window-rules" "toggle"; }
 
     // === Session ===
     Ctrl+Alt+Delete { spawn "dms" "ipc" "call" "powermenu" "toggle"; }
@@ -41,21 +43,22 @@ binds {
     // ========== Window Management ==========
     // =======================================
     // =======================================
-    
+
     // ===============
     // === Windows ===
     // ===============
 
     // === Basics ===
     Mod+Tab repeat=false { toggle-overview; }
+    Mod+Shift+Tab repeat=false { close-overview; }
 
     Mod+Q { close-window; }
     Alt+F4 { close-window; }
 
-    Mod+F { maximize-column; }
+    Mod+F { spawn "sh" "-c" "if niri msg -j focused-window | grep -q is_floating.:true; then niri msg action move-window-to-tiling; sleep 0.1; fi; niri msg action maximize-column"; }
     Mod+Shift+F { fullscreen-window; }
 
-    Mod+T { spawn "sh" "-c" "niri msg action toggle-window-floating; if niri msg -j focused-window | grep -q is_floating.:true; then niri msg action set-window-width 50%; niri msg action set-window-height 70%; niri msg action center-window; else niri msg action set-column-width 66.667%; sleep 0.1; niri msg action center-column; fi"; }
+    Mod+T { spawn "sh" "-c" "niri msg action toggle-window-floating; if niri msg -j focused-window | grep -q is_floating.:true; then niri msg action set-window-width 50%; niri msg action set-window-height 65%; niri msg action center-window; else niri msg action set-column-width 66.667%; sleep 0.1; niri msg action center-column; fi"; }
     Mod+Shift+T { switch-focus-between-floating-and-tiling; }
 
     // === Focus windows ===
@@ -72,7 +75,7 @@ binds {
     Mod+Shift+Right { move-column-right; }
     Mod+Shift+Up    { move-window-up; }
     Mod+Shift+Down  { move-window-down; }
-    
+
     Mod+Alt+Left  { consume-or-expel-window-left; }
     Mod+Alt+Right { consume-or-expel-window-right; }
 
@@ -83,23 +86,27 @@ binds {
     Mod+Shift+Minus { set-window-height "-10%"; }
 
     Mod+R { switch-preset-column-width; }
-    Mod+Shift+R { reset-window-height; }
+    Mod+Ctrl+R { reset-window-height; }
 
     Mod+C { center-column; }
     Mod+Shift+C { center-visible-columns; }
-    
+
 
     // ================
     // === Monitors ===
     // ================
-    
+
     // === Focus monitors ===
     Mod+Ctrl+Left  { focus-monitor-left; }
     Mod+Ctrl+Right { focus-monitor-right; }
+    Mod+Ctrl+Up    { focus-monitor-up; }
+    Mod+Ctrl+Down  { focus-monitor-down; }
 
     // === Move windows to monitors ===
     Mod+Ctrl+Shift+Left  { move-column-to-monitor-left; }
     Mod+Ctrl+Shift+Right { move-column-to-monitor-right; }
+    Mod+Ctrl+Shift+Up    { move-column-to-monitor-up; }
+    Mod+Ctrl+Shift+Down  { move-column-to-monitor-down; }
 
 
     // ==================
@@ -116,8 +123,6 @@ binds {
     Mod+7 { focus-workspace 7; }
     Mod+8 { focus-workspace 8; }
     Mod+9 { focus-workspace 9; }
-    Mod+Ctrl+Down { focus-workspace-down; }
-    Mod+Ctrl+Up   { focus-workspace-up; }
     Mod+Page_Down { focus-workspace-down; }
     Mod+Page_Up   { focus-workspace-up; }
 
@@ -131,8 +136,6 @@ binds {
     Mod+Shift+7 { move-column-to-workspace 7; }
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
-    Mod+Ctrl+Shift+Up   { move-column-to-workspace-up; }
-    Mod+Ctrl+Shift+Down { move-column-to-workspace-down; }
     Mod+Shift+Page_Up   { move-column-to-workspace-up; }
     Mod+Shift+Page_Down { move-column-to-workspace-down; }
 
@@ -144,9 +147,6 @@ binds {
     // ============
     // === Misc ===
     // ============
-
-    // === Create window rule ===
-    Mod+Shift+W hotkey-overlay-title="Create window rule" { spawn "dms" "ipc" "call" "window-rules" "toggle"; }
 
     // === Mouse Wheel Navigation ===
     Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }

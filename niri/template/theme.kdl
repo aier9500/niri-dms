@@ -11,11 +11,11 @@ layout {
     background-color "transparent"
 
     border {
-        width 2    // inactive border, default colour is transparent
+        width 3    // inactive border, default colour is transparent
     }
 
     focus-ring {
-        width 2    // active window border thickness
+        width 3    // active window border thickness
     }
 }
 
