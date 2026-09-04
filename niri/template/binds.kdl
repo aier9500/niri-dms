@@ -17,8 +17,8 @@ binds {
     Mod+Return          { spawn "ghostty"; }
     Mod+Shift+Return    { spawn "flatpak" "run" "md.obsidian.Obsidian"; }
     Ctrl+Shift+Escape   { spawn "flatpak" "run" "io.missioncenter.MissionCenter"; }
-    Alt+Space       { spawn "voxtype" "record" "toggle"; }
-    Alt+Shift+Space { spawn "voxtype" "record" "cancel"; }
+    // Dictation; works only with custom OpenWhispr script
+    Alt+Space { spawn "dbus-send" "--session" "--type=method_call" "--dest=com.openwhispr.App" "/com/openwhispr/App" "com.openwhispr.App.Toggle"; }
     Mod+E { spawn "nautilus"; }
     Mod+B { spawn "flatpak" "run" "app.zen_browser.zen"; }
     Mod+V { spawn "dms" "ipc" "call" "clipboard" "toggle"; }

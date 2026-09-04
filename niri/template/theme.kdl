@@ -31,6 +31,20 @@ window-rule {
     }
 }
 
+// OpenWhispr dictation pill appearance tuning.
+window-rule {
+    match app-id="(?i)^open-whispr$" title="^Voice Recorder$"
+
+    open-focused false    // false -> pill appears without stealing focus
+    border      { off; }
+    focus-ring  { off; }
+    shadow      { off; }
+
+    background-effect { blur false; xray false; }
+
+    default-floating-position x=0 y=16 relative-to="top"
+}
+
 recent-windows {
     highlight {
         corner-radius 8    // Alt+Tab highlight box rounding

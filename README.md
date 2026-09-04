@@ -6,7 +6,7 @@
 > Clone it there with the command below, or adjust the `repo=` line in each block.
 
 > [!TIP]
-> This repo uses symlinks to their respectives folders in `~/.config` (e.g. ~/.config/niri, ~/.config/voxtype). You can their configs in one place in `~/.dotfiles/niri-dms`.
+> This repo uses symlinks to their respectives folders in `~/.config` (e.g. ~/.config/niri). You can their configs in one place in `~/.dotfiles/niri-dms`.
 
 # Niri + DMS dotfiles
 
@@ -17,7 +17,7 @@
 - UI tuning that is:
   - Clean & modern.
   - Out-of-the-way with fast but lively animations.
-- Voxtype (dictation) setup, and optional local LLM cleanup layer.
+- OpenWhispr (dictation) setup with AI clean-up, fully-local available.
 - Edit (almost) everything in this repo, all in one place!
 
 ## To clone this repo
@@ -160,7 +160,10 @@ Some settings worth changing in the DMS settings after fresh install. Sorted by 
     - Clock (`%Y-%m-%d · %H:%M` aka ISO)
     - Notification Center
 
-- `arqueon-dms-gaze-auth` (face unlock; alternative to the PAM edit below)
+### Plugins
+
+**dGPU Sleep Monitor** — Control GPU mode with `cardwire`.
+**Gaze Authentification** — Face unlock integration; simpler alternative to the PAM edit below.
 
 ### Displays
 
@@ -175,187 +178,96 @@ Some settings worth changing in the DMS settings after fresh install. Sorted by 
 - Lock before suspend -> true
 - Lock 5m, screen off 10m, sleep 20m
 
-## Voice Typing (`voxtype`)
+## Voice Typing (`OpenWhispr`)
 
-Press hotkey, talk, and the text pastes at your cursor. An optional local-LLM tidies the grammar and spelling.
+Dictation with text cleanup.
+
+OpenWhispr has no Niri support: it does have a Hyprland backend that exposes a Dbus service and for the compositor to call.
+
+### Install OpenWhispr
+
+Download the package from [https://openwhispr.com](https://openwhispr.com) and install it.
+
+Then install `wtype`, which OpenWhispr uses to paste on wlroots-style compositors:
+
+```bash
+sudo dnf install wtype jq
+```
+
+Set up OpenWhispr within the GUI.
 
 > [!TIP]
-> `voxtype` is the solution I would suggest before OpenWhispr implements better Wayland compositor support.
+> **Dictation model recommendations:**
 >
-> OpenWhispr has a much simpler setup but its universal keybinding does not work without an extensive amount of tweaks.
-
-### Install `voxtype`
-
-Install the package using instructions from [https://voxtype.io/download](https://voxtype.io/download). Then:
-
-Create the `voxtype` config:
-
-```bash
-voxtype setup
-```
-
-> [!TIP]
-> **Whispr model recommendations:**
+> GPU: Turbo\
+> Capable iGPU: Small\
+> Smaller models: Base, Tiny
 >
-> GPU: `large-v3-turbo`\
-> Capable iGPU: `small`\
-> Smaller models: `base`, `tiny`
+> **Cleanup model recommendations:**
+>
+> GPU (4-6 GB VRAM): Gemma 4 E4B\
+> GPU (6+ GB VRAM): Qwen 3.5 9B\
+> Off-device: OpenWhispr Cloud, self-host, no cleanup.
+>
+> **My setup:**
+> 4060 Mobile 8 GB VRAM, Turbo + Gemma 4 E4B.
 
-Configure a transcription model:
+### Launcher and desktop override
+
+Links the launcher into `~/.local/bin` and overrides the packaged desktop entry so **every** way of starting OpenWhispr goes through it.
+
+> [!IMPORTANT]
+> The desktop override is not optional, it's needed to access the DBus service.
 
 ```bash
-voxtype setup model # then select your model
+repo=~/.dotfiles/niri-dms/openwhispr
+
+mkdir -p ~/.local/bin ~/.local/share/applications
+ln -sfn "$repo/openwhispr-niri" ~/.local/bin/openwhispr-niri
+
+# rewrites the .desktop from /user/share with the patched DBus service to ~/.local/share
+sed 's|^Exec=.*|Exec='"$HOME"'/.local/bin/openwhispr-niri %U|' \
+  /usr/share/applications/open-whispr.desktop \
+  > ~/.local/share/applications/open-whispr.desktop
+update-desktop-database ~/.local/share/applications
 ```
 
-```bash
-voxtype setup --download  # download the speech model
-voxtype setup check       # report anything still missing
-```
+Quit OpenWhispr completely and start it again from your app launcher, so it comes up through the wrapper.
 
-### `voxtype` Binding
+Try launching OpenWhispr via `Alt+Space` focused on another app.
+
+### OpenWhispr Binding
 
 In this repo, it is bound via `niri/user/binds.kdl`:
 
-- `Alt+Space` -> start / stop recording
-- `Alt+Shift+Space` -> cancel, discards without pasting
+- `Alt+Space` -> toggle dictation
 
-In the `~/.config/voxtype/config.toml`, disable kernel level shortcut. Disable on Wayland compositors; enable only on DEs like GNOME and KDE.
+The bind calls the D-Bus method directly, so it works regardless of what hotkey is configured inside OpenWhispr:
 
-```toml
-[hotkey]
-enabled = false
+```bash
+dbus-send --session --type=method_call --dest=com.openwhispr.App \
+  /com/openwhispr/App com.openwhispr.App.Toggle
 ```
 
 ### Autostart
 
-Instead of `voxtype setup systemd` which uses the stock daemon, use the repo's unit + launcher so the dictionary comes from `~/.config/voxtype/dictionary.txt`. More on the dictionary in the section below.
+`niri/user/autostart.kdl` starts OpenWhispr with the session:
 
-The following code
-
-- Creates a private copy of the example dictionary list.
-- Links the following to `~/.config/voxtype/`:
-  - `voxtype/dictionary.txt` — portable dictionary list.
-  - `voxtype/voxtype-with-dictionary.sh` — script that pipes dictionary list into whispr.
-- And links the following to `~/.config/systemd/user/`:
-  - `voxtype/voxtype.service` — `systemd` service that tells `voxtype` to always use the script above.
-- Reloads and starts custom `voxtype`.
-
-```bash
-repo=~/.dotfiles/niri-dms/voxtype
-mkdir -p ~/.config/systemd/user  # may not exist on fresh install
-cp -n "$repo/dictionary.txt.example" "$repo/dictionary.txt"
-ln -sfn "$repo/dictionary.txt" ~/.config/voxtype/dictionary.txt
-ln -sfn "$repo/voxtype-with-dictionary.sh" ~/.config/voxtype/voxtype-with-dictionary.sh
-ln -sfn "$repo/voxtype.service" ~/.config/systemd/user/voxtype.service
-systemctl --user daemon-reload
-systemctl --user enable --now voxtype    # autostart on login + start now
+```kdl
+spawn-at-startup "sh" "-c" "exec $HOME/.local/bin/openwhispr-niri"
 ```
 
-### Configuring `voxtype`
+### Window rule
 
-The `voxtype` config file is in `~/.config/voxtype/config.toml`. This is an autogenerated file by `voxtype` so it is not symlinked from this repo.
+`niri/user/theme.kdl` keeps only the pill and places it at the top-centre of the screen instead of leaving an ugly window; it is also set to not steal your focus.
 
-Edit using:
+### QoL Additions to your shell config
 
-```bash
-$EDITOR ~/.config/voxtype/config.toml
-```
+Add these to `~/.bashrc`, `~/.zshrc` or `~/.config/fish/config.fish`:
 
-... or edit via the TUI using:
+### Side effect
 
-```bash
-voxtype configure
-```
-
-#### Sound feedback
-
-In `~/.config/voxtype/config.toml`, enable sound feedback and set it to a non-distracting volume.
-
-```toml
-[audio.feedback]
-enabled = true
-volume = 0.2
-```
-
-#### Output mode
-
-Set the output mode to `clipboard` so the transcript is copied to your clipboard and you paste it yourself with `Ctrl+V` or `Ctrl+Shift+V`. Requires `wl-copy` (Wayland).
-
-The four modes:
-
-- `type` — simulate keystrokes char-by-char at the cursor.
-- `clipboard` — copy to clipboard, paste manually.
-- `paste` — copy to clipboard, then fires `Ctrl+V`, might not work in the terminal.
-- `file` — write the transcript to a file (`file_path` needs to be defined).
-
-```toml
-[output]
-mode = "clipboard"
-```
-
-#### Personal dictionary
-
-Proper nouns and jargon that Whisper would otherwise mistranscribe live in `voxtype/dictionary.txt` — one term per line, `#` comments and blank lines ignored:
-
-```
-# voxtype/dictionary.txt
-# --- AI / LLM ---
-OpenWhispr
-Claude
-Qwen
-# --- People (add your own) ---
-Jane Doe
-Bob
-# ... etc
-```
-
-The repo ships an template dictionary list `voxtype/dictionary.txt.example`; the [Autostart](#autostart) step above created a local copy to `voxtype/dictionary.txt`.
-
-Voxtype can't read a word list from a file on its own — it only accepts an `initial_prompt` string in `config.toml`. To avoid cluttering the config file, we use `voxtype/voxtype-with-dictionary.sh` to process and inject `dictionary.txt` to run `voxtype --initial-prompt "…" daemon`.
-
-### QoL Additions to `.bashrc`
-
-Add these to your `~/.bashrc` (or your shell's config — `~/.zshrc`, `~/.config/fish/config.fish`, etc.):
-
-- `edit-dict` to edit the dictionary.
-- `restart-voxtype` to restart voxtype after dictionary edit.
-- `restart-voxllm` to restart voxtype and ollama to use dGPU after turning GPU on.
-
-```bash
-# voxtype QoL aliases
-alias edit-dict='$EDITOR $HOME/.config/voxtype/dictionary.txt'
-alias restart-voxtype='systemctl --user restart voxtype.service'
-alias restart-voxllm='systemctl --user restart voxtype.service && systemctl restart ollama'
-```
-
-### AI cleanup (optional)
-
-Runs each transcript through a local LLM to fix grammar, converts to British spelling, strips the "um"s.
-
-> [!TIP]
-> This repo has a script (`voxtype/cleanup.sh`) that pipes raw output to Gemma 4 E4B and processes it; it contains the prompt that is given to the LLM to clean up text.
->
-> Feel free to tweak the script if 1) you don't want conversion to British English, 2) want specific writing style/tone, 3) others.
-
-> [!WARNING]
-> Needs Ollama **0.20+**. Ollama doesn't package for repos, that's why we are curling.
->
-> `cleanup.sh` req: `jq` and `curl`.
-
-Installs Ollama, downloads gemma4:e4b model, applies LLM cleanup script:
-
-```bash
-curl -fsSL https://ollama.com/install.sh | sh
-ollama pull gemma4:e4b
-ln -sfn ~/.dotfiles/niri-dms/voxtype/cleanup.sh ~/.config/voxtype/cleanup.sh
-```
-
-In `~/.config/voxtype/config.toml`, set the post processing command to use the LLM cleanup script:
-
-```toml
-[output.post_process]
-command = "sh -c 'exec \"$HOME/.config/voxtype/cleanup.sh\"'"
-```
+OpenWhispr writes `~/.config/hypr/openwhispr-binds.conf` at startup. Niri never reads it, so it is harmless bloat.
 
 ## `gaze` (facial recognition) integration with DMS Lock
 

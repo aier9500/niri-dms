@@ -1,0 +1,32 @@
+#!/bin/sh
+# This is what Alt+Space triggers on niri to access OpenWhispr.
+#
+# OpenWhispr turns on its Dbus remote control interface when it thinks the
+# desktop is GNOME, KDE or Hyprland. This script tells it the desktop is
+# Hyprland (though it is Niri) then sends keypresses via dbus-send. 
+# 
+# The shim also tells OpenWhispr which window is focused, so it knows
+# whether to paste with Ctrl+Shift+V (terminal) or Ctrl+V (everything else).
+#
+# NOTE: I don't use auto-paste too much and have only tested this briefly, 
+# it seems to work well, but let me know in the issues if something doesn't. 
+
+SHIM="${XDG_RUNTIME_DIR:-/tmp}/openwhispr-niri-shim"
+mkdir -p "$SHIM"
+
+cat > "$SHIM/hyprctl" <<'SHIMEOF'
+#!/bin/sh
+for arg in "$@"; do
+    [ "$arg" = "activewindow" ] || continue
+    niri msg -j focused-window 2>/dev/null \
+        | jq -c '{class: (.app_id // ""), title: (.title // "")}' 2>/dev/null \
+        || echo '{"class":"","title":""}'
+    exit 0
+done
+echo ok
+SHIMEOF
+chmod +x "$SHIM/hyprctl"
+
+export HYPRLAND_INSTANCE_SIGNATURE=niri
+export PATH="$SHIM:$PATH"
+exec /opt/OpenWhispr/open-whispr "$@"
