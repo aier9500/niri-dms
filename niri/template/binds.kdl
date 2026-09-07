@@ -18,7 +18,7 @@ binds {
     Mod+Shift+Return    { spawn "flatpak" "run" "md.obsidian.Obsidian"; }
     Ctrl+Shift+Escape   { spawn "flatpak" "run" "io.missioncenter.MissionCenter"; }
     // Dictation; works only with custom OpenWhispr script
-    Alt+Space { spawn "dbus-send" "--session" "--type=method_call" "--dest=com.openwhispr.App" "/com/openwhispr/App" "com.openwhispr.App.Toggle"; }
+    Mod+W { spawn "dbus-send" "--session" "--type=method_call" "--dest=com.openwhispr.App" "/com/openwhispr/App" "com.openwhispr.App.Toggle"; }
     Mod+E { spawn "nautilus"; }
     Mod+B { spawn "flatpak" "run" "app.zen_browser.zen"; }
     Mod+V { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
@@ -56,7 +56,7 @@ binds {
     Alt+F4 { close-window; }
 
     Mod+F { spawn "sh" "-c" "if niri msg -j focused-window | grep -q is_floating.:true; then niri msg action move-window-to-tiling; sleep 0.1; fi; niri msg action maximize-column"; }
-    Mod+Shift+F { fullscreen-window; }
+    Mod+Shift+F { maximize-window-to-edges; }
 
     Mod+T { spawn "sh" "-c" "niri msg action toggle-window-floating; if niri msg -j focused-window | grep -q is_floating.:true; then niri msg action set-window-width 50%; niri msg action set-window-height 65%; niri msg action center-window; else niri msg action set-column-width 66.667%; sleep 0.1; niri msg action center-column; fi"; }
     Mod+Shift+T { switch-focus-between-floating-and-tiling; }
