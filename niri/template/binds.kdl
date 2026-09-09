@@ -55,8 +55,8 @@ binds {
     Mod+Q { close-window; }
     Alt+F4 { close-window; }
 
-    Mod+F { spawn "sh" "-c" "if niri msg -j focused-window | grep -q is_floating.:true; then niri msg action move-window-to-tiling; sleep 0.1; fi; niri msg action maximize-column"; }
-    Mod+Shift+F { maximize-window-to-edges; }
+    Mod+F { maximize-window-to-edges; }
+    Mod+Shift+F { spawn "sh" "-c" "if niri msg -j focused-window | grep -q is_floating.:true; then niri msg action move-window-to-tiling; sleep 0.1; fi; niri msg action maximize-column"; }
 
     Mod+T { spawn "sh" "-c" "niri msg action toggle-window-floating; if niri msg -j focused-window | grep -q is_floating.:true; then niri msg action set-window-width 50%; niri msg action set-window-height 65%; niri msg action center-window; else niri msg action set-column-width 66.667%; sleep 0.1; niri msg action center-column; fi"; }
     Mod+Shift+T { switch-focus-between-floating-and-tiling; }
