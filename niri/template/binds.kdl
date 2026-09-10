@@ -149,11 +149,10 @@ binds {
     // ============
 
     // === Mouse Wheel Navigation ===
-    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
-    Mod+WheelScrollUp   cooldown-ms=150 { focus-workspace-up; }
-
-    Mod+WheelScrollRight { focus-column-right; }
-    Mod+WheelScrollLeft  { focus-column-left; }
+    Mod+WheelScrollDown  cooldown-ms=500 { focus-workspace-down; }
+    Mod+WheelScrollUp    cooldown-ms=500 { focus-workspace-up; }
+    Mod+WheelScrollRight cooldown-ms=500 { focus-column-right; }
+    Mod+WheelScrollLeft  cooldown-ms=500 { focus-column-left; }
 
 
     // ==========================================
