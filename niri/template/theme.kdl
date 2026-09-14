@@ -61,14 +61,28 @@ blur {
 animations {
     slowdown 1.0    // global speed; <1 = faster than default
 
-    window-movement          { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-    window-resize            { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-    window-open              { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-    window-close             { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-    horizontal-view-movement { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-    workspace-switch         { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-
-    overview-open-close             { spring damping-ratio=0.8 stiffness=650 epsilon=0.0001; }
-    screenshot-ui-open              { spring damping-ratio=0.8 stiffness=650 epsilon=0.0001; }
-    config-notification-open-close  { spring damping-ratio=0.8 stiffness=650 epsilon=0.0001; }
+    window-movement                 { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
+    window-resize                   { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
+    window-open                     { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
+    window-close                    { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
+    horizontal-view-movement        { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
+    workspace-switch                { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
+    overview-open-close             { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
+    screenshot-ui-open              { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
+    config-notification-open-close  { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
 }
+
+// Use the following for a more dynamic looking feel
+// animations {
+//     slowdown 1.0    // global speed; <1 = faster than default
+// 
+//     window-movement                 { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
+//     window-resize                   { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
+//     window-open                     { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
+//     window-close                    { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
+//     horizontal-view-movement        { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
+//     workspace-switch                { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
+//     overview-open-close             { spring damping-ratio=0.80 stiffness=650 epsilon=0.0001; }
+//     screenshot-ui-open              { spring damping-ratio=0.80 stiffness=650 epsilon=0.0001; }
+//     config-notification-open-close  { spring damping-ratio=0.80 stiffness=650 epsilon=0.0001; }
+// }
