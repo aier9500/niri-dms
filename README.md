@@ -32,8 +32,10 @@ git clone https://github.com/aier9500/niri-dms ~/.dotfiles/niri-dms
 ### Installing packages on Fedora
 
 ```bash
-# Terra repo (terra-extras) has newer versions
-sudo dnf install niri DankMaterialShell
+# DMS from the upstream COPR
+sudo dnf copr enable avengemedia/danklinux   # quickshell
+sudo dnf copr enable avengemedia/dms
+sudo dnf install niri dms
 dms setup                                        # writes ~/.config/niri/dms/*.kdl
 systemctl --user add-wants niri.service dms      # DMS starts and stops with niri
 ```
