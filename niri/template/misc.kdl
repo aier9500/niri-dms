@@ -13,8 +13,10 @@ environment {
     XMODIFIERS "@im=fcitx"  // XWayland apps reach fcitx5 via XIM; native apps use text-input-v3
 }
 
-gestures {
-    hot-corners {
-        off
-    }
+clipboard {
+    disable-primary    // disable select to copy & middle-click paste
+}
+
+cursor {
+    hide-when-typing
 }
