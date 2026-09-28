@@ -259,7 +259,7 @@ spawn-at-startup "sh" "-c" "exec $HOME/.local/bin/openwhispr-niri"
 
 ### Window rule
 
-`niri/user/theme.kdl` keeps only the pill and places it at the top-centre of the screen instead of leaving an ugly window; it is also set to not steal your focus.
+`niri/user/theme.kdl` keeps only the pill and places it 16px from the bottom-right corner without stealing focus.
 
 ### QoL Additions to your shell config
 
