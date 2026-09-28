@@ -126,45 +126,11 @@ Optional — skip if you don't use multiple keyboard layouts. This repo's Niri c
 sudo dnf install fcitx5 fcitx5-rime fcitx5-configtool
 ```
 
-## DMS Settings Suggestions
-
-Some settings worth changing in the DMS settings after fresh install. Sorted by section.
-
-> [!TIP]
-> This repo's keyboard shortcuts live in `niri/user/binds.kdl`.
->
-> I highly suggest not using the DMS GUI for bindings. Consider binding via the .kdl file and backing them up.
-
-### Personalization
-
-- Theme & Color
-  - Theme Color -> Auto (derived from wallpaper)
-  - Automatic Color Mode
-    - Automatic Control
-    - Share Gamma Control Settings
-  - Font
-- App theming -> enable GTK, Qt (qt6ct), Ghostty, Kitty
-
-### Dank Bar
-
-- Position -> bottom, floating with 8px margins, ~70% opacity
-- Widgets:
-  - Left
-    - Workspace Switcher (no labels)
-    - Running Apps (current workspace only)
-  - Centre
-    - Media Controls (hide when idle)
-  - Right
-    - System Tray
-    - dGPU Sleep Monitor _plugin_
-    - Battery
-    - Control Center
-    - Clock (`%Y-%m-%d · %H:%M` aka ISO)
-    - Notification Center
-
-### Plugins
+## Suggested Plugins
 
 **dGPU Sleep Monitor** — Control GPU mode with `cardwire`.
+**Emoji & Unicode Launcher**
+**Dank ASUS Control Center** — Control ASUS laptop performance modes and battery charge limit.
 **Gaze Authentification** — Face unlock integration; simpler alternative to the PAM edit below.
 
 ### Displays
@@ -238,52 +204,6 @@ Quit OpenWhispr completely and start it again from your app launcher, so it come
 
 Try launching OpenWhispr via `Alt+Space` focused on another app.
 
-### OpenWhispr Binding
-
-In this repo, it is bound via `niri/user/binds.kdl`:
-
-- `Alt+Space` -> toggle dictation
-
-The bind calls the D-Bus method directly, so it works regardless of what hotkey is configured inside OpenWhispr:
-
-```bash
-dbus-send --session --type=method_call --dest=com.openwhispr.App \
-  /com/openwhispr/App com.openwhispr.App.Toggle
-```
-
-### Autostart
-
-`niri/user/autostart.kdl` starts OpenWhispr with the session:
-
-```kdl
-spawn-at-startup "sh" "-c" "exec $HOME/.local/bin/openwhispr-niri"
-```
-
 ### Window rule
 
 `niri/user/theme.kdl` keeps only the pill and places it 16px from the bottom-right corner without stealing focus.
-
-### QoL Additions to your shell config
-
-Add these to `~/.bashrc`, `~/.zshrc` or `~/.config/fish/config.fish`:
-
-### Side effect
-
-OpenWhispr writes `~/.config/hypr/openwhispr-binds.conf` at startup. Niri never reads it, so it is harmless bloat.
-
-## `gaze` (facial recognition) integration with DMS Lock
-
-`gaze` has yet to add official support for DMS Lock. DMS Lock reads `/etc/pam.d/dankshell`:
-
-```bash
-sudo tee /etc/pam.d/dankshell > /dev/null << 'EOF'
-#%PAM-1.0
-# Let gaze unlock DMS Lock
-auth    sufficient    pam_gaze.so
-# Fall back to password
-auth    substack      system-auth
-EOF
-sudo chmod 644 /etc/pam.d/dankshell
-```
-
-Press enter in the DMS Lock to trigger `gaze`.
