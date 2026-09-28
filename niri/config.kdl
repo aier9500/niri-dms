@@ -1,10 +1,12 @@
 include "dms/alttab.kdl"
-// include "dms/binds.kdl"      // user/binds.kdl
-include "dms/colors.kdl"        // colors first so later layout can override
+include "dms/binds.kdl"
+include "dms/colors.kdl"
 include "dms/cursor.kdl"
-// include "dms/layout.kdl"     // user/theme.kdl
+include "dms/input.kdl"
+include "dms/layout.kdl"
 include "dms/outputs.kdl"
 include "dms/windowrules.kdl"
+include "dms/wpblur.kdl"
 
 include "user/autostart.kdl"
 include "user/binds.kdl"

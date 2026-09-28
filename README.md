@@ -53,7 +53,7 @@ mv ~/.config/niri ~/.config/niri.bak
 > [!NOTE]
 > The repo supplies you with config templates in `niri/template`. Use the code block below to create your editable copies at `niri/user` (gitignored).
 >
-> The `dms/*.kdl` files are also gitignored as DMS rewrites them (colours, cursor, outputs, GUI window rules) as you use its GUI. The stub loop below creates empty placeholders so Niri won't error on a missing include before DMS has written the real ones. `dms/binds.kdl` and `dms/layout.kdl` are deliberately not included: binds live in `user/binds.kdl`, geometry in `user/theme.kdl`.
+> The `dms/*.kdl` files are also gitignored as DMS rewrites them (colours, cursor, outputs, GUI window rules) as you use its GUI. The stub loop below creates empty placeholders so Niri won't error on a missing include before DMS has written the real ones.
 
 Symlinks repo Niri configs to `~/.config/niri`. Creates local copies of every `niri/template/*.kdl` in `niri/user/`.
 
@@ -65,7 +65,7 @@ cp -rn "$repo/template/." "$repo/user/"  # copy templates
 
 # Stub loop to create DMS config placeholders
 mkdir -p "$repo/dms"
-for file in alttab colors cursor outputs windowrules; do
+for file in alttab binds colors cursor input layout outputs windowrules wpblur; do
   if [ ! -e "$repo/dms/$file.kdl" ]; then
     touch "$repo/dms/$file.kdl"
   fi

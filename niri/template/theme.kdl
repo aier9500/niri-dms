@@ -1,33 +1,12 @@
 //
-// The vast majority of what Niri looks like, minus the colours, which are handled by DMs. 
+// The vast majority of what Niri looks like, minus what DMS manages.
 //
 
 prefer-no-csd // disables client-side decors
 
-// cursor declared in dms/cursor.kdl (auto-generated from DMS cursorSettings)
-
-layout {
-    gaps 8
-    background-color "transparent"
-
-    border {
-        width 3    // inactive border, default colour is transparent
-    }
-
-    focus-ring {
-        width 3    // active window border thickness
-    }
-}
-
 window-rule {
-    geometry-corner-radius 8
-    clip-to-geometry true                // true -> trims content to enforce rounding
-    tiled-state true                     // true -> lets niri have prio drawing corners
-    draw-border-with-background false    // false -> is border-only , no shape fill
-
     background-effect {
         blur true    // blur for transparent windows
-        xray true    // true -> static blur, more efficient
     }
 }
 
@@ -44,45 +23,3 @@ window-rule {
 
     default-floating-position x=0 y=16 relative-to="top"
 }
-
-recent-windows {
-    highlight {
-        corner-radius 8    // Alt+Tab highlight box rounding
-    }
-}
-
-blur {
-    passes 3          // 3, higher = less artifacts at cost of GPU = hazier
-    offset 8          // 2 = subtle, 4 = medium, 8 = dreamy; higher needs more passes
-    noise 0.04        // 0 = smooth, 0.2 gritty
-    saturation 1.0    // 1 = true colours, 1.2 slightly punchy, 1.6 vibrant
-}
-
-animations {
-    slowdown 1.0    // global speed; <1 = faster than default
-
-    window-movement                 { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
-    window-resize                   { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
-    window-open                     { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
-    window-close                    { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
-    horizontal-view-movement        { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
-    workspace-switch                { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
-    overview-open-close             { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
-    screenshot-ui-open              { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
-    config-notification-open-close  { spring damping-ratio=1.0 stiffness=700 epsilon=0.0001; }
-}
-
-// Use the following for a more dynamic looking feel
-// animations {
-//     slowdown 1.0    // global speed; <1 = faster than default
-// 
-//     window-movement                 { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-//     window-resize                   { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-//     window-open                     { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-//     window-close                    { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-//     horizontal-view-movement        { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-//     workspace-switch                { spring damping-ratio=0.85 stiffness=700 epsilon=0.0001; }
-//     overview-open-close             { spring damping-ratio=0.80 stiffness=650 epsilon=0.0001; }
-//     screenshot-ui-open              { spring damping-ratio=0.80 stiffness=650 epsilon=0.0001; }
-//     config-notification-open-close  { spring damping-ratio=0.80 stiffness=650 epsilon=0.0001; }
-// }
