@@ -8,5 +8,4 @@ environment {
     ELECTRON_OZONE_PLATFORM_HINT "auto" // Tell Electron apps to use Wayland when possible
     QT_QPA_PLATFORM "wayland;xcb"       // Tell QT apps to use Wayland, fallback to X11
     NIXOS_OZONE_WL "1"                  // Tell Nix apps to use Wayland when possible
-    XMODIFIERS "@im=fcitx"  // Let X11 apps use fcitx5 via XIM
 }

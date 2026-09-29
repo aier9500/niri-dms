@@ -1,20 +1,14 @@
-// Some sane defaults
+// Input options DMS settings don't cover.
+// niri doesn't merge touchpad/mouse blocks across files: this touchpad block
+// replaces DMS's, so DMS touchpad toggles do nothing. Kept here for clickfinger.
 
 input {
-    keyboard {
-        numlock
-    }
-
     touchpad {
         tap                                 // tap to click
         natural-scroll                      // content follows fingers
         dwt                                 // disable touchpad while typing
+        scroll-method "two-finger"
         click-method "clickfinger"          // 1 finger=left, 2=right, 3=middle
-        tap-button-map "left-right-middle"  // 1=left, 2=right, 3=middle
-    }
-
-    mouse {
-        accel-profile "flat"                // no mouse acceleration
     }
 
     // Hyprland-style: hover to focus & cursor jumps with keyboard focus
@@ -24,8 +18,4 @@ input {
 
 clipboard {
     disable-primary    // disable select to copy & middle-click paste
-}
-
-cursor {
-    // hide-when-typing
 }

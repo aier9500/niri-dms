@@ -1,3 +1,6 @@
+// The lower you place the line, the more priority that file has. 
+// By default, user files are placed below
+
 include "dms/alttab.kdl"
 include "dms/binds.kdl"
 include "dms/colors.kdl"
@@ -10,9 +13,11 @@ include "dms/wpblur.kdl"
 
 include "user/autostart.kdl"
 include "user/binds.kdl"
-include "user/fcitx5.kdl"
 include "user/inputs.kdl"
 include "user/hardware.kdl"
 include "user/misc.kdl"
-include "user/openwhispr.kdl"
 include "user/theme.kdl"
+
+// Program specific modules
+include "user/fcitx5.kdl"
+include "user/openwhispr.kdl" // keep after theme.kdl so its specific theme overrides apply
