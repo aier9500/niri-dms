@@ -26,6 +26,7 @@ binds {
 
     // === Components ===
     Mod+Y { spawn "dms" "ipc" "call" "dankdash" "wallpaper"; }
+    Mod+D { spawn "dms" "ipc" "call" "dash" "toggle" "overview"; }
     Mod+S { spawn "dms" "ipc" "call" "control-center" "toggle"; }
     Mod+M { spawn "dms" "ipc" "call" "notifications" "toggle"; }
     Mod+A { spawn "dms" "ipc" "call" "spotlight" "toggle"; }

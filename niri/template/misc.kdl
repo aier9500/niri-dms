@@ -1,5 +1,3 @@
-// Personal: fcitx Xmodifier
-
 screenshot-path "~/Pictures/Screenshots/Screenshot From %Y-%m-%d %H-%M-%S.png"
 
 hotkey-overlay {
@@ -7,16 +5,8 @@ hotkey-overlay {
 }
 
 environment {
-    ELECTRON_OZONE_PLATFORM_HINT "auto"
-    QT_QPA_PLATFORM "wayland;xcb"
-    NIXOS_OZONE_WL "1"
-    XMODIFIERS "@im=fcitx"  // XWayland apps reach fcitx5 via XIM; native apps use text-input-v3
-}
-
-clipboard {
-    disable-primary    // disable select to copy & middle-click paste
-}
-
-cursor {
-    hide-when-typing
+    ELECTRON_OZONE_PLATFORM_HINT "auto" // Tell Electron apps to use Wayland when possible
+    QT_QPA_PLATFORM "wayland;xcb"       // Tell QT apps to use Wayland, fallback to X11
+    NIXOS_OZONE_WL "1"                  // Tell Nix apps to use Wayland when possible
+    XMODIFIERS "@im=fcitx"  // Let X11 apps use fcitx5 via XIM
 }

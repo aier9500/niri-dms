@@ -1,22 +1,17 @@
 //
-// The vast majority of what Niri looks like, minus what DMS manages.
+// Some look-related things that DMS doesn't manage
 //
 
 prefer-no-csd // disables client-side decors
 
 window-rule {
     background-effect {
-        blur true    // blur for transparent windows
+        blur true    // blur for transparent windows (xray default)
     }
 }
 
-// OpenWhispr dictation pill: bare, unfocused, bottom-right
-window-rule {
-    match app-id="(?i)^open-whispr$" title="^Voice Recorder$"
-    open-focused false
-    border { off; }
-    focus-ring { off; }
-    shadow { off; }
-    background-effect { blur false; }
-    default-floating-position x=16 y=16 relative-to="bottom-right"
+// Minimalistic overview blur
+layer-rule {
+    match namespace="^quickshell$"
+    place-within-backdrop true
 }

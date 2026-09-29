@@ -1,3 +1,1 @@
-// Personal: fcitx5
-
-spawn-at-startup "fcitx5" "-d"  // IME (Rime/Cantonese) via input-method-v2
+// Add programs to autostart with Niri below

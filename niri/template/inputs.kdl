@@ -17,7 +17,15 @@ input {
         accel-profile "flat"                // no mouse acceleration
     }
 
-    // Opt-in, Hyprland-style: hover to focus & cursor jumps with keyboard focus
-    // focus-follows-mouse max-scroll-amount="25%"      // focus follows mouse
-    // warp-mouse-to-focus                              // move cursor to focus
+    // Hyprland-style: hover to focus & cursor jumps with keyboard focus
+    focus-follows-mouse max-scroll-amount="25%"      // focus follows mouse
+    warp-mouse-to-focus                              // move cursor to focus
+}
+
+clipboard {
+    disable-primary    // disable select to copy & middle-click paste
+}
+
+cursor {
+    // hide-when-typing
 }

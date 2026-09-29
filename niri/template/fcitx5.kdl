@@ -1,0 +1,5 @@
+spawn-at-startup "fcitx5" "-d"  // IME (Rime/Cantonese) via input-method-v2
+
+environment {
+    XMODIFIERS "@im=fcitx"  // Let X11 apps use fcitx5 via XIM
+}
