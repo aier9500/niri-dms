@@ -11,7 +11,6 @@ include "dms/outputs.kdl"
 include "dms/windowrules.kdl"
 include "dms/wpblur.kdl"
 
-include "user/autostart.kdl"
 include "user/binds.kdl"
 include "user/inputs.kdl"
 include "user/hardware.kdl"
