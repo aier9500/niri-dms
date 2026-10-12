@@ -11,13 +11,14 @@ debug {
     // ▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿
     // render-drm-device "/dev/dri/renderD128"
 
-    // Problem: flickering / artifacts in dGPU + iGPU setup
-    // Solutions: 
-    //     1. (Recommended for laptops) Use the option below & set
-    //        `render-drm-device` to iGPU.
-    //         + Pro: Allows you to keep power usage low by using iGPU.
-    //         - Con: Introduces a latency (that you may or may not notice).
-    //     2. Ignore the option below and set `render-drm-device` to dGPU.
+    // Problem: tearing or half-drawn frames on a monitor driven by a GPU
+    //          other than `render-drm-device` 
+    // e.g. ProArt P16 2025: eDP-1 and the USB-C/DP ports
+    //   are on the iGPU; only the HDMI port is on the RTX 4060. Laptop screen
+    //   plus USB-C monitors never need it, however many you connect.
+    // Con: niri blocks until the GPU finishes each frame. Adds latency, and
+    //   can appear as a freeze when GPU is heavily-loaded.
+    // Leave off unless a screen on the other GPU shows artifacts.
     //
     // ▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿▿
     // wait-for-frame-completion-before-queueing
